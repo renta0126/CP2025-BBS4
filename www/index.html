@@ -143,16 +143,22 @@ function escapeHtml(str) {
 }
 
 // タイムスタンプのフォーマット
+// タイムスタンプのフォーマット（〇分前表示）
 function formatTimestamp(timestamp) {
-    const date = new Date(timestamp);
-    return date.toLocaleString('ja-JP', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit'
-    });
+    const now = Date.now();
+    const a = Math.floor((now - timestamp) / 1000);
+
+    if (a < 60) {
+        return 'たった今';
+    } else if (a < 3600) {
+        return `${Math.floor(a / 60)}分前`;
+    } else if (a < 86400) {
+        return `${Math.floor(a / 3600)}時間前`;
+    } else {
+        return `${Math.floor(a / 86400)}日前`;
+    }
 }
+
 
 // 投稿の編集権限チェック
 function canEditPost(post) {
