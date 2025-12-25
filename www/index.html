@@ -50,22 +50,28 @@ function getAuthErrorMessage(error) {
     }
 }
 
-// 文字数カウントの更新
+// 文字数カウントの更新（残り文字数表示）
 function updateCharacterCount(inputId, counterId, maxLength) {
     const input = $(`#${inputId}`);
     const counter = $(`#${counterId}`);
 
-    input.on('input', () => {
+    function update() {
         const length = input.val().length;
-        counter.text(`${length}/${maxLength}`);
+        const remaining = maxLength - length;
 
-        if (length > maxLength) {
+        counter.text(`残り ${remaining} 文字`);
+
+        if (remaining < 0) {
             counter.addClass('error');
         } else {
             counter.removeClass('error');
         }
-    });
+    }
+
+    input.on('input', update);
+    update(); // 初期表示
 }
+
 
 // 投稿内容のバリデーション
 function validateContent(content) {
